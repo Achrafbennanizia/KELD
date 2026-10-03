@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# KELD — Titanium field bottle
 
-## Getting Started
+Cinematic **product launch landing** for a fictional titanium outdoor bottle: scroll-scrubbed WebGL product, material story, temperature proof, founders-batch reserve.
 
-First, run the development server:
+Portfolio **project 4** (after product-reveal, spatial-brand, selene).
+
+**Live (after Pages enable):** [https://achrafbennanizia.github.io/field-thermos/](https://achrafbennanizia.github.io/field-thermos/)
+
+## Stack
+- Next.js (App Router) + TypeScript + Tailwind CSS v4
+- Photoreal product packshots (scroll-scrubbed 3D turn) + Commons lifestyle photos
+- Motion + Lenis (desktop smooth scroll)
+- Static export → GitHub Pages (`/field-thermos`)
+
+## Design
+- Trail charcoal `#0E1210`, mist bone `#E8E4DC`, glacier `#7BA89A`
+- Display: Bricolage Grotesque · Body: Figtree
+- Brand-first hero, one-viewport sections, ~93% threshold snap
+
+## Run
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Build
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+npm run build:pages
+npm run typecheck
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## CI/CD
+| Workflow | Trigger | Steps |
+|---|---|---|
+| **CI** | PR + push `main` | lint → typecheck → Pages build |
+| **Deploy** | push `main` + manual | same → GitHub Pages |
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Enable once: **Settings → Pages → Source: GitHub Actions**.
+# KELD
