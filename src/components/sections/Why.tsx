@@ -15,7 +15,7 @@ export function Why() {
   return (
     <section
       id="why"
-      className="section-panel relative z-10 flex items-end px-4 pt-[46dvh] pb-[max(1.25rem,env(safe-area-inset-bottom))] md:items-center md:px-8 md:py-24 md:pt-24"
+      className="section-panel relative z-10 flex items-end px-4 pt-[46dvh] pb-[max(1.25rem,env(safe-area-inset-bottom))] md:items-center md:justify-center md:px-8 md:py-24"
     >
       <SectionStage>
         <motion.div

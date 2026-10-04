@@ -21,10 +21,12 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     }
 
     const lenis = new Lenis({
-      duration: 1.85,
+      duration: 1.15,
       easing: cinematicEase,
       smoothWheel: true,
-      wheelMultiplier: 0.78,
+      wheelMultiplier: 0.92,
+      touchMultiplier: 1,
+      syncTouch: false,
     });
     registerLenis(lenis);
 

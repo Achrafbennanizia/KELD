@@ -8,7 +8,7 @@ export function Proof() {
   return (
     <section
       id="proof"
-      className="section-panel relative z-10 flex items-end px-4 pt-[42dvh] pb-[max(1rem,env(safe-area-inset-bottom))] md:items-center md:px-8 md:py-14 md:pt-14"
+      className="section-panel relative z-10 flex items-end px-4 pt-[42dvh] pb-[max(1rem,env(safe-area-inset-bottom))] md:items-center md:justify-center md:px-8 md:py-14"
     >
       <SectionStage wide>
         <div className="max-h-[min(52dvh,720px)] overflow-y-auto overscroll-contain pr-1 md:max-h-[min(82dvh,720px)]">

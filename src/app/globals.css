@@ -30,7 +30,7 @@
 }
 
 html {
-  scroll-snap-type: y proximity;
+  /* JS threshold snap only — CSS snap fights Lenis */
   scroll-behavior: auto;
 }
 
@@ -47,15 +47,35 @@ body {
   overflow-x: clip;
 }
 
+/* One viewport tall — centered on desktop; mobile keeps bottle/copy split via section classes */
 .section-panel {
   min-height: 100dvh;
-  max-height: 100dvh;
   overflow-x: clip;
-  overflow-y: auto;
-  overscroll-behavior-y: contain;
-  scroll-snap-align: start;
-  scroll-snap-stop: normal;
-  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+}
+
+.section-panel > * {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .section-panel {
+    justify-content: center;
+  }
+}
+
+/* Packshot travel amplitude — muted on mobile, full sweep on desktop */
+.product-stage-shot {
+  --pose-x-amp: 4vw;
+  --pose-y-amp: 2vh;
+}
+
+@media (min-width: 768px) {
+  .product-stage-shot {
+    --pose-x-amp: 28vw;
+    --pose-y-amp: 7vh;
+  }
 }
 
 /* Content rails — parked on one side only; never mid-overlap with bottle */
@@ -229,15 +249,6 @@ body {
   border-bottom: none;
 }
 
-.section-panel::-webkit-scrollbar {
-  width: 3px;
-}
-
-.section-panel::-webkit-scrollbar-thumb {
-  background: color-mix(in oklab, var(--glacier) 50%, transparent);
-  border-radius: 999px;
-}
-
 html.lenis,
 html.lenis body {
   height: auto;
@@ -268,6 +279,58 @@ select {
   font-weight: 700;
   letter-spacing: -0.045em;
   line-height: 0.92;
+}
+
+.nav-brand {
+  transition: opacity 220ms var(--ease), color 220ms var(--ease);
+}
+
+.nav-brand:hover {
+  opacity: 0.78;
+  color: var(--glacier-bright);
+}
+
+.nav-link {
+  position: relative;
+  transition: color 220ms var(--ease);
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.3rem;
+  width: 100%;
+  height: 1px;
+  background: var(--glacier-bright);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 280ms var(--ease);
+}
+
+.nav-link:hover {
+  color: var(--mist);
+}
+
+.nav-link:hover::after {
+  transform: scaleX(1);
+}
+
+.nav-cta {
+  transition:
+    transform 300ms var(--ease),
+    border-color 220ms var(--ease),
+    color 220ms var(--ease),
+    box-shadow 300ms var(--ease),
+    background-color 220ms var(--ease);
+}
+
+.nav-cta:hover {
+  transform: translateY(-1px);
+  border-color: var(--glacier);
+  color: var(--glacier-bright);
+  background: rgba(123, 168, 154, 0.12);
+  box-shadow: 0 8px 22px rgba(123, 168, 154, 0.22);
 }
 
 .btn-mist {
@@ -333,7 +396,7 @@ select {
 
 @media (prefers-reduced-motion: reduce) {
   html {
-    scroll-snap-type: none;
+    scroll-behavior: auto;
   }
 
   *,

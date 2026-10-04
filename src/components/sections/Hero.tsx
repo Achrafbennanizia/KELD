@@ -9,7 +9,7 @@ export function Hero() {
   return (
     <section
       id="top"
-      className="section-panel relative z-10 flex items-end px-4 pt-[46dvh] pb-[max(1.5rem,env(safe-area-inset-bottom))] md:items-center md:px-8 md:pt-28 md:pb-24"
+      className="section-panel relative z-10 flex items-end px-4 pt-[46dvh] pb-[max(1.5rem,env(safe-area-inset-bottom))] md:items-center md:justify-center md:px-8 md:py-24"
     >
       <SectionStage>
         <motion.p

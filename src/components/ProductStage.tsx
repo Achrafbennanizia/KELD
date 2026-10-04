@@ -8,7 +8,7 @@ import { useScrollProgress } from "@/lib/scroll-progress";
 
 /**
  * Media Gallery — one finish + unique camera angle per section.
- * Captions sit on a dark bar for contrast; atmosphere matches the slide.
+ * Packshot travels continuously on scroll (strongest through 2–4 and 5–6).
  */
 export function ProductStage() {
   const { progress, reducedMotion } = useScrollProgress();
@@ -21,7 +21,8 @@ export function ProductStage() {
     if (!footer) return;
 
     const io = new IntersectionObserver(
-      ([entry]) => setFooterVisible(entry.isIntersecting && entry.intersectionRatio > 0.02),
+      ([entry]) =>
+        setFooterVisible(entry.isIntersecting && entry.intersectionRatio > 0.02),
       { root: null, threshold: [0, 0.02, 0.08, 0.2] },
     );
     io.observe(footer);
@@ -35,6 +36,10 @@ export function ProductStage() {
   const active = Math.round(floatIndex);
   const slide = GALLERY[active] ?? GALLERY[0];
 
+  const travelTransform = reducedMotion
+    ? "none"
+    : `translate3d(calc(var(--pose-x) * var(--pose-x-amp)), calc(var(--pose-y) * var(--pose-y-amp)), 0) rotate(calc(var(--pose-r) * 1deg)) scale(var(--pose-s))`;
+
   return (
     <div
       className="pointer-events-none fixed inset-0 z-[1] overflow-hidden"
@@ -42,18 +47,22 @@ export function ProductStage() {
         {
           ["--slide-hex" as string]: slide.hex,
           ["--slide-accent" as string]: slide.accent,
+          ["--pose-x" as string]: pose.x,
+          ["--pose-y" as string]: pose.y,
+          ["--pose-r" as string]: pose.rotate,
+          ["--pose-s" as string]: pose.scale,
         } as React.CSSProperties
       }
     >
       <div className="absolute inset-0 bg-trail" aria-hidden />
 
-      {/* Strong per-section color field */}
+      {/* Strong per-section color field — tracks packshot side */}
       <div
-        className="absolute inset-0 transition-[background] duration-500"
+        className="absolute inset-0"
         style={{
           background: `
-            radial-gradient(ellipse 62% 52% at ${onLeft ? "18%" : "82%"} 38%, ${slide.hex}66, transparent 58%),
-            radial-gradient(ellipse 48% 42% at ${onLeft ? "75%" : "20%"} 80%, ${slide.accent}44, transparent 55%),
+            radial-gradient(ellipse 62% 52% at ${50 + pose.x * 32}% 38%, ${slide.hex}66, transparent 58%),
+            radial-gradient(ellipse 48% 42% at ${50 - pose.x * 30}% 80%, ${slide.accent}44, transparent 55%),
             radial-gradient(ellipse 35% 30% at 50% 0%, ${slide.hex}33, transparent 50%),
             linear-gradient(165deg, #0a100e 0%, #0c1210 50%, #100e0c 100%)
           `,
@@ -61,34 +70,36 @@ export function ProductStage() {
         aria-hidden
       />
       <div
-        className="absolute inset-0 opacity-30 mix-blend-screen transition-opacity duration-500"
+        className="absolute inset-0 opacity-30 mix-blend-screen"
         style={{
-          background: `linear-gradient(115deg, transparent 25%, ${slide.accent}88 50%, transparent 75%)`,
+          background: `linear-gradient(${115 + pose.x * 25}deg, transparent 25%, ${slide.accent}88 50%, transparent 75%)`,
         }}
         aria-hidden
       />
 
-      {/* Gallery — blind when footer enters view */}
+      {/* Gallery — continuous travel; blinds when footer enters view */}
       <div
-        className={[
-          "absolute inset-x-0 top-0 flex h-[48dvh] items-end justify-center pb-2 md:inset-y-0 md:h-auto md:w-[50%] md:items-center md:pb-0",
-          onLeft
-            ? "md:left-0 md:justify-end md:pr-5"
-            : "md:right-0 md:left-auto md:justify-start md:pl-5",
-        ].join(" ")}
+        className="product-stage-frame absolute inset-x-0 top-0 flex h-[48dvh] items-end justify-center pb-2 md:inset-y-0 md:h-auto md:items-center md:pb-0"
         style={{
-          transition:
-            "left 550ms var(--ease), right 550ms var(--ease), opacity 420ms var(--ease), visibility 420ms var(--ease), transform 420ms var(--ease)",
           opacity: footerVisible ? 0 : 1,
           visibility: footerVisible ? "hidden" : "visible",
-          transform: footerVisible ? "translateY(18px) scale(0.96)" : "none",
+          transition:
+            "opacity 420ms var(--ease), visibility 420ms var(--ease)",
           pointerEvents: "none",
         }}
         aria-hidden={footerVisible}
       >
         <div
-          className="relative mb-0 h-[min(40dvh,320px)] w-[min(78vw,280px)] md:mb-8 md:h-[min(64dvh,520px)] md:w-[min(90vw,340px)]"
-          style={{ perspective: "1400px" }}
+          className="product-stage-shot relative mb-0 h-[min(40dvh,320px)] w-[min(78vw,280px)] will-change-transform md:mb-8 md:h-[min(64dvh,520px)] md:w-[min(90vw,340px)]"
+          style={{
+            perspective: "1400px",
+            transform: footerVisible
+              ? "translateY(18px) scale(0.96)"
+              : travelTransform,
+            transition: footerVisible
+              ? "transform 420ms var(--ease)"
+              : undefined,
+          }}
         >
           {GALLERY.map((shot, i) => {
             const dist = floatIndex - i;
@@ -112,19 +123,22 @@ export function ProductStage() {
               const settle = 1 - Math.min(1, abs * 1.7);
               opacity = 0.55 + settle * 0.45;
               scale = 1.08 + settle * 0.1;
-              y = dist * -12;
+              y = dist * -14;
+              x = dist * (onLeft ? 10 : -10);
               z = 60;
-              rotateY = onLeft ? dist * 7 : dist * -7;
+              rotateY = onLeft ? dist * 9 : dist * -9;
             } else if (abs < 1.6) {
+              // Neighboring finishes drift off in the travel direction
               const t = Math.max(0, 1 - (abs - 0.45) / 1.15);
-              opacity = Math.min(0.22, t * 0.22);
-              scale = 0.68 + t * 0.05;
-              x = (dist > 0 ? 1 : -1) * (onLeft ? -36 : 36) * (0.4 + (1 - t));
-              y = (dist > 0 ? 1 : -1) * (48 + (1 - t) * 30);
-              z = -160;
-              blur = 7;
-              rotateY = onLeft ? (dist > 0 ? -18 : 18) : dist > 0 ? 18 : -18;
-              rotateZ = (dist > 0 ? 1 : -1) * 4;
+              const dir = dist > 0 ? 1 : -1;
+              opacity = Math.min(0.28, t * 0.28);
+              scale = 0.66 + t * 0.06;
+              x = dir * (onLeft ? -48 : 48) * (0.45 + (1 - t));
+              y = dir * (56 + (1 - t) * 36);
+              z = -180;
+              blur = 8;
+              rotateY = onLeft ? (dist > 0 ? -22 : 22) : dist > 0 ? 22 : -22;
+              rotateZ = dir * 5;
             }
 
             return (
@@ -171,7 +185,6 @@ export function ProductStage() {
                     style={{ background: shot.wash, opacity: 0.75 }}
                   />
 
-                  {/* Caption — compact on mobile, fuller on desktop */}
                   {isHero && (
                     <div
                       className="absolute inset-x-0 bottom-0 z-10 px-3 pb-[4.5rem] pt-16 md:px-4 md:pb-28 md:pt-24"
@@ -188,7 +201,10 @@ export function ProductStage() {
                       </p>
                       <p
                         className="display mt-1 text-xl leading-none md:text-3xl"
-                        style={{ color: shot.label, textShadow: "0 2px 12px rgba(0,0,0,0.8)" }}
+                        style={{
+                          color: shot.label,
+                          textShadow: "0 2px 12px rgba(0,0,0,0.8)",
+                        }}
                       >
                         {shot.name}
                       </p>
@@ -267,7 +283,7 @@ export function ProductStage() {
         aria-hidden
       />
 
-      {/* Desktop side reading veils */}
+      {/* Desktop side reading veils — follow copy side */}
       <div
         className="absolute inset-y-0 left-0 hidden w-[54%] md:block"
         style={{

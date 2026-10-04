@@ -15,25 +15,32 @@ import {
 } from "@/lib/scroll-to";
 
 const SNAP_AT = 0.93;
-const SNAP_DURATION = 1.15;
+const SNAP_DURATION = 0.95;
+const SNAP_COOLDOWN_MS = 700;
 
-function goToSection(id: string, duration = 2.1) {
+function goToSection(id: string, duration = 1.6) {
   smoothScrollToId(id, duration);
 }
 
-function sectionTops() {
+type Top = { id: SectionId; top: number };
+
+function measureTops(): Top[] {
   return SECTIONS.map((s) => {
     const el = document.getElementById(s.id);
     return el ? { id: s.id, top: el.offsetTop } : null;
-  }).filter((x): x is { id: SectionId; top: number } => Boolean(x));
+  }).filter((x): x is Top => Boolean(x));
 }
 
 let lastY = 0;
 let scrollDir: 1 | -1 | 0 = 0;
+let cachedTops: Top[] = [];
+let lastSnapAt = 0;
 
 function maybeThresholdSnap() {
   if (isProgrammaticScroll() || prefersReducedMotion()) return;
-  const tops = sectionTops();
+  if (performance.now() - lastSnapAt < SNAP_COOLDOWN_MS) return;
+
+  const tops = cachedTops;
   if (tops.length < 2) return;
   const y = window.scrollY;
 
@@ -42,12 +49,17 @@ function maybeThresholdSnap() {
     if (y >= tops[n].top) i = n;
   }
 
+  const snap = (id: SectionId) => {
+    lastSnapAt = performance.now();
+    goToSection(id, SNAP_DURATION);
+  };
+
   if (scrollDir >= 0 && i < tops.length - 1) {
     const a = tops[i].top;
     const b = tops[i + 1].top;
     const span = b - a;
-    if (span >= 48 && (y - a) / span >= SNAP_AT && y < b - 2) {
-      goToSection(tops[i + 1].id, SNAP_DURATION);
+    if (span >= 80 && (y - a) / span >= SNAP_AT && y < b - 2) {
+      snap(tops[i + 1].id);
       return;
     }
   }
@@ -56,8 +68,8 @@ function maybeThresholdSnap() {
     const a = tops[i].top;
     const b = tops[i + 1].top;
     const span = b - a;
-    if (span >= 48 && (b - y) / span >= SNAP_AT && y > a + 2) {
-      goToSection(tops[i].id, SNAP_DURATION);
+    if (span >= 80 && (b - y) / span >= SNAP_AT && y > a + 2) {
+      snap(tops[i].id);
       return;
     }
   }
@@ -66,8 +78,8 @@ function maybeThresholdSnap() {
     const curr = tops[i].top;
     const prev = tops[i - 1].top;
     const span = curr - prev;
-    if (span >= 48 && y < curr && (curr - y) / span >= SNAP_AT && y > prev + 2) {
-      goToSection(tops[i - 1].id, SNAP_DURATION);
+    if (span >= 80 && y < curr && (curr - y) / span >= SNAP_AT && y > prev + 2) {
+      snap(tops[i - 1].id);
     }
   }
 }
@@ -78,36 +90,43 @@ export function ScrollAssist() {
   const [hint, setHint] = useState(true);
   const progressMv = useMotionValue(0);
   const progress = useSpring(progressMv, {
-    stiffness: reduced ? 400 : 48,
-    damping: reduced ? 40 : 18,
-    mass: 0.85,
+    stiffness: reduced ? 400 : 120,
+    damping: reduced ? 40 : 28,
+    mass: 0.6,
   });
 
   useEffect(() => {
     let raf = 0;
     let settle = 0;
     let ticking = false;
+    let hintCleared = false;
+
+    const refreshTops = () => {
+      cachedTops = measureTops();
+    };
 
     const read = () => {
       ticking = false;
-      const max =
-        document.documentElement.scrollHeight - window.innerHeight;
-      progressMv.set(max > 0 ? Math.min(1, window.scrollY / max) : 0);
-      if (window.scrollY > window.innerHeight * 0.45) setHint(false);
+      const y = window.scrollY;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      progressMv.set(max > 0 ? Math.min(1, y / max) : 0);
 
-      const mid = window.scrollY + window.innerHeight * 0.4;
+      if (!hintCleared && y > window.innerHeight * 0.45) {
+        hintCleared = true;
+        setHint(false);
+      }
+
+      const mid = y + window.innerHeight * 0.4;
       let best: SectionId = "top";
       let bestDist = Infinity;
-      for (const section of SECTIONS) {
-        const el = document.getElementById(section.id);
-        if (!el) continue;
-        const d = Math.abs(el.offsetTop - mid);
+      for (const section of cachedTops) {
+        const d = Math.abs(section.top - mid);
         if (d < bestDist) {
           bestDist = d;
           best = section.id;
         }
       }
-      setActive(best);
+      setActive((prev) => (prev === best ? prev : best));
     };
 
     const onScroll = () => {
@@ -115,25 +134,27 @@ export function ScrollAssist() {
       const dy = y - lastY;
       if (Math.abs(dy) > 0.5) scrollDir = dy > 0 ? 1 : -1;
       lastY = y;
+
       if (!ticking) {
         ticking = true;
         raf = requestAnimationFrame(read);
       }
-      maybeThresholdSnap();
+
       window.clearTimeout(settle);
-      settle = window.setTimeout(() => maybeThresholdSnap(), 90);
+      settle = window.setTimeout(() => maybeThresholdSnap(), 120);
     };
 
+    refreshTops();
     lastY = window.scrollY;
     const boot = requestAnimationFrame(read);
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
+    window.addEventListener("resize", refreshTops, { passive: true });
     return () => {
       cancelAnimationFrame(boot);
       cancelAnimationFrame(raf);
       window.clearTimeout(settle);
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      window.removeEventListener("resize", refreshTops);
     };
   }, [progressMv]);
 
@@ -144,7 +165,10 @@ export function ScrollAssist() {
         aria-label="Section progress"
       >
         <div className="pointer-events-auto relative flex flex-col items-center gap-3">
-          <div className="absolute top-2 bottom-2 left-1/2 w-px -translate-x-1/2 bg-line" aria-hidden />
+          <div
+            className="absolute top-2 bottom-2 left-1/2 w-px -translate-x-1/2 bg-line"
+            aria-hidden
+          />
           <motion.div
             className="absolute top-2 left-1/2 w-px origin-top -translate-x-1/2 bg-glacier"
             style={{ scaleY: progress, height: "calc(100% - 1rem)" }}
@@ -179,10 +203,10 @@ export function ScrollAssist() {
                           width: 6,
                           height: 6,
                           backgroundColor: "rgba(168,160,148,0.55)",
-                          boxShadow: "0 0 0 rgba(123,168,154,0)",
+                          boxShadow: "0 0 0 rgba(0,0,0,0)",
                         }
                   }
-                  transition={{ type: "spring", stiffness: 220, damping: 22 }}
+                  transition={{ type: "spring", stiffness: 260, damping: 26 }}
                 />
               </button>
             );
@@ -198,7 +222,7 @@ export function ScrollAssist() {
         }}
         initial={false}
         animate={{ opacity: hint ? 1 : 0, y: hint ? 0 : 10 }}
-        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         className={`fixed bottom-[max(1.5rem,env(safe-area-inset-bottom))] left-1/2 z-40 hidden -translate-x-1/2 flex-col items-center gap-1.5 text-[10px] tracking-[0.22em] text-mist-muted uppercase sm:flex ${
           hint ? "" : "pointer-events-none"
         }`}
