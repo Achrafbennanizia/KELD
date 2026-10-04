@@ -1,0 +1,112 @@
+{
+  "targetName": "KELD titanium vacuum bottle",
+  "sourceImage": "/Users/achraf/pro/websites/field-thermos/public/photos/keld-bottle-hero.jpg",
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "hard-surface cylindrical vessel",
+      "primaryDomain": "object",
+      "formLanguage": ["lathe", "cylindrical", "filleted"],
+      "structureKind": ["assembled-parts", "screw-cap"],
+      "motionPotential": ["cap-unscrew", "orbit-inspect"],
+      "materialFamilies": ["brushed-titanium", "elastomer-gasket"],
+      "notes": "Single-view packshot with supporting side/detail/angle photos. Tall vacuum bottle ~4:1 H:W."
+    },
+    "complexity": {
+      "tier": "moderate",
+      "scores": {
+        "silhouetteComplexity": 2,
+        "componentCount": 3,
+        "hierarchyDepth": 2,
+        "repetitionDensity": 3,
+        "materialLayerCount": 2,
+        "localDetailDensity": 3,
+        "occlusionRisk": 2,
+        "actionReadinessNeed": 2
+      },
+      "estimatedCounts": {
+        "macroComponents": 3,
+        "mesoComponents": 4,
+        "microFeatureGroups": 3,
+        "materialLayers": 2,
+        "repetitionSystems": 1
+      },
+      "reasoning": [
+        "Simple overall silhouette (cylinder + cap) but identity depends on knurls, gasket, shoulder fillet, and brushed anisotropy."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "moderate",
+      "minimumComponentLevels": ["macro", "meso", "micro"],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Hero prop for scroll-scrubbed product stage; knurl repetition + two titanium brush directions require meso/micro depth."
+    },
+    "unknownsToResolveBeforeImplementation": [
+      "Exact thread under cap (occluded)",
+      "Inner vacuum wall (not visible)",
+      "Base underside dish (not visible)"
+    ],
+    "detailInventory": {
+      "scanMethod": "grid-3x3",
+      "targetMinDetails": 6,
+      "note": "Filled from zone crops + detail packshot.",
+      "details": [
+        "cap-top-radial-brush",
+        "cap-knurl-band",
+        "gasket-lip",
+        "soft-shoulder",
+        "body-horizontal-brush",
+        "base-fillet",
+        "cap-seam-recess"
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0.0,
+      "proportions": {},
+      "pose": { "type": "n/a", "jointAngles": {} },
+      "faceLandmarks": {},
+      "features": [],
+      "confidence": 0.0,
+      "note": "Object domain — anatomy unused."
+    },
+    "sourceImage": "/Users/achraf/pro/websites/field-thermos/public/photos/keld-bottle-hero.jpg"
+  },
+  "qualityContract": {
+    "qualityBar": "moderate",
+    "definitionOfDone": [
+      "Silhouette H:W ≈ 4:1 with soft shoulder and filleted base",
+      "Cap ~16% height, diameter ≈ 0.95–1.0 × body",
+      "Visible black gasket under cap",
+      "Vertical knurl band on cap",
+      "Brushed titanium #8a8f8c, metalness≈0.96, roughness≈0.42 with vertical softbox highlight",
+      "Explodable hierarchy: body / gasket / cap with sculptRuntime"
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 3,
+      "mesoComponents": 4,
+      "microFeatureGroups": 3,
+      "materialLayers": 2,
+      "repetitionSystems": 1,
+      "reviewViewpoints": 3
+    },
+    "featureGroups": [
+      { "id": "overall-silhouette", "name": "Overall silhouette and proportions", "required": true },
+      { "id": "cap-knurls", "name": "Cap knurl grip band", "required": true },
+      { "id": "gasket", "name": "Black gasket lip", "required": true },
+      { "id": "brushed-titanium", "name": "Brushed titanium response", "required": true },
+      { "id": "shoulder-fillet", "name": "Soft shoulder into neck", "required": true }
+    ]
+  },
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "queries": [
+      "brushed titanium PBR metalness roughness anisotropy",
+      "cylindrical vessel lathe shoulder fillet",
+      "knurled cap grip ridges"
+    ],
+    "note": "Auto BM25 from new_pre_spec_assessment; agent-filled domain terms for vacuum bottle / titanium."
+  }
+}

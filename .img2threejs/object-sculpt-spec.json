@@ -1,0 +1,1625 @@
+{
+  "targetName": "KELD titanium vacuum bottle",
+  "targetId": "keld-titanium-vacuum-bottle",
+  "schemaVersion": "2.1",
+  "terminologyProfile": {
+    "domain": "real-time procedural Three.js asset",
+    "geometryTerms": [
+      "silhouette",
+      "topology",
+      "primitive",
+      "bevel",
+      "chamfer",
+      "taper",
+      "bend",
+      "boolean cut",
+      "edge loop",
+      "surface normal",
+      "displacement"
+    ],
+    "materialTerms": [
+      "albedo",
+      "baseColor",
+      "roughness",
+      "metalness",
+      "normal map",
+      "bump map",
+      "ambient occlusion",
+      "cavity dirt",
+      "edge wear",
+      "clearcoat"
+    ],
+    "lightingTerms": [
+      "key light",
+      "fill light",
+      "rim light",
+      "HDRI/environment reflection",
+      "contact shadow"
+    ],
+    "descriptionRule": "Use measurable 3D graphics terms. Avoid vague words unless they are paired with concrete geometry/material/shader parameters."
+  },
+  "sourceImage": "/Users/achraf/pro/websites/field-thermos/public/photos/keld-bottle-hero.jpg",
+  "referenceCamera": {
+    "solved": false,
+    "fovDegrees": 28.0,
+    "aspect": 0.75,
+    "orientation": {
+      "yaw": -35.0,
+      "pitch": 12.0,
+      "roll": 0.0
+    },
+    "positionHint": [
+      1.2,
+      1.4,
+      4.5
+    ],
+    "note": "Packshot three-quarter elevation ~12\u00b0; no solved pose \u2014 procedural review uses matched framing."
+  },
+  "suitability": "pass",
+  "scores": {
+    "object_isolation": 0.95,
+    "silhouette_readability": 0.92,
+    "depth_inference": 0.7,
+    "primitive_decomposition": 0.9,
+    "material_procedurality": 0.85,
+    "occlusion_risk": 0.35,
+    "interaction_fit": 0.8
+  },
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "hard-surface cylindrical vessel",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "lathe",
+        "cylindrical",
+        "filleted"
+      ],
+      "structureKind": [
+        "assembled-parts",
+        "screw-cap"
+      ],
+      "motionPotential": [
+        "cap-unscrew",
+        "orbit-inspect"
+      ],
+      "materialFamilies": [
+        "brushed-titanium",
+        "elastomer-gasket"
+      ],
+      "notes": "Single-view packshot with supporting side/detail/angle photos. Tall vacuum bottle ~4:1 H:W."
+    },
+    "complexity": {
+      "tier": "moderate",
+      "scores": {
+        "silhouetteComplexity": 2,
+        "componentCount": 3,
+        "hierarchyDepth": 2,
+        "repetitionDensity": 3,
+        "materialLayerCount": 2,
+        "localDetailDensity": 3,
+        "occlusionRisk": 2,
+        "actionReadinessNeed": 2
+      },
+      "estimatedCounts": {
+        "macroComponents": 3,
+        "mesoComponents": 4,
+        "microFeatureGroups": 3,
+        "materialLayers": 2,
+        "repetitionSystems": 1
+      },
+      "reasoning": [
+        "Simple overall silhouette (cylinder + cap) but identity depends on knurls, gasket, shoulder fillet, and brushed anisotropy."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "moderate",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Hero prop for scroll-scrubbed product stage; knurl repetition + two titanium brush directions require meso/micro depth."
+    },
+    "unknownsToResolveBeforeImplementation": [
+      "Exact thread under cap (occluded)",
+      "Inner vacuum wall (not visible)",
+      "Base underside dish (not visible)"
+    ],
+    "detailInventory": {
+      "scanMethod": "grid-3x3",
+      "targetMinDetails": 6,
+      "note": "Filled from zone crops + detail packshot.",
+      "details": [
+        "cap-top-radial-brush",
+        "cap-knurl-band",
+        "gasket-lip",
+        "soft-shoulder",
+        "body-horizontal-brush",
+        "base-fillet",
+        "cap-seam-recess"
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0.0,
+      "proportions": {},
+      "pose": {
+        "type": "n/a",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {},
+      "features": [],
+      "confidence": 0.0,
+      "note": "Object domain \u2014 anatomy unused."
+    },
+    "sourceImage": "/Users/achraf/pro/websites/field-thermos/public/photos/keld-bottle-hero.jpg"
+  },
+  "qualityContract": {
+    "qualityBar": "moderate",
+    "definitionOfDone": [
+      "Silhouette H:W \u2248 4:1 with soft shoulder and filleted base",
+      "Cap ~16% height, diameter \u2248 0.95\u20131.0 \u00d7 body",
+      "Visible black gasket under cap",
+      "Vertical knurl band on cap",
+      "Brushed titanium #8a8f8c, metalness\u22480.96, roughness\u22480.42 with vertical softbox highlight",
+      "Explodable hierarchy: body / gasket / cap with sculptRuntime"
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 3,
+      "mesoComponents": 4,
+      "microFeatureGroups": 3,
+      "materialLayers": 2,
+      "repetitionSystems": 1,
+      "reviewViewpoints": 3
+    },
+    "featureGroups": [
+      {
+        "id": "overall-silhouette",
+        "name": "Overall silhouette and proportions",
+        "required": true
+      },
+      {
+        "id": "cap-knurls",
+        "name": "Cap knurl grip band",
+        "required": true
+      },
+      {
+        "id": "gasket",
+        "name": "Black gasket lip",
+        "required": true
+      },
+      {
+        "id": "brushed-titanium",
+        "name": "Brushed titanium response",
+        "required": true
+      },
+      {
+        "id": "shoulder-fillet",
+        "name": "Soft shoulder into neck",
+        "required": true
+      }
+    ],
+    "mustNotDo": [
+      "Adjacent components must overlap by at least 0.02 world units at shared seams (source: grimoire/build/geometry_patterns.md).",
+      "Raised or recessed relief and fasteners must be geometry, instanced micro-parts, or displacement; a map alone is an approximation (source: grimoire/build/geometry_patterns.md)."
+    ]
+  },
+  "qualityTargets": {
+    "targetFidelity": 0.7,
+    "mustMatch": [
+      "macro silhouette and proportions",
+      "primary material albedo/roughness response",
+      "reference-derived PBR material response at or above 0.7 confidence when source pixels are usable",
+      "most recognizable local features"
+    ],
+    "niceToHave": [
+      "micro scratches, stains, chips, and dirt masks",
+      "secondary lighting match"
+    ],
+    "fpsTarget": 60,
+    "reviewViewpoints": [
+      "front",
+      "three-quarter",
+      "side",
+      "thickness-axis",
+      "long-axis"
+    ]
+  },
+  "selfCorrectLoop": {
+    "enabled": true,
+    "visualAcceptance": {
+      "reviewer": "ai-vision",
+      "threshold": 0.7,
+      "comparisonArtifactRequired": true,
+      "layerScoresRequired": true,
+      "codePixelDiffIsAcceptanceAuthority": false,
+      "scoringRule": "AI vision must inspect a side-by-side reference/render sheet and score the current pass from 0 to 1. Pixel-diff code may assist diagnostics but cannot approve a pass.",
+      "requiredLayerScores": [
+        "silhouetteProportion",
+        "componentStructure",
+        "formDetail",
+        "materialSurface",
+        "lightingCamera"
+      ],
+      "featureReviewPolicy": {
+        "enabled": true,
+        "reviewUnit": "semantic-subsystem",
+        "maxCriticalFeaturesPerPass": 5,
+        "maxImportantFeaturesPerPass": 3,
+        "criticalDefaultThreshold": 0.8,
+        "importantAverageThreshold": 0.65,
+        "adaptiveEscalation": true,
+        "singleImagePairOnly": true,
+        "selectionRule": "Choose only the most visually salient, identity-defining, user-prioritized, or high-risk semantic systems. Group repeated parts instead of reviewing every mesh. AI vision scores every selected feature from the same full reference/render pair."
+      }
+    },
+    "reviewAfterPasses": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "surface-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "allowedActions": [
+      "continue",
+      "refine-spec",
+      "refine-code",
+      "request-input",
+      "stop"
+    ],
+    "specRefineTriggers": [
+      "missing component",
+      "wrong primitive family",
+      "wrong proportions",
+      "material layer under-specified",
+      "local feature not traceable to viewEvidence",
+      "reference ambiguity discovered during implementation"
+    ],
+    "codeRefineTriggers": [
+      "spec is adequate but generated geometry/material does not match",
+      "browser render differs from reference",
+      "performance budget exceeded",
+      "lighting hides geometry or material response"
+    ],
+    "stopCriteria": [
+      "target fidelity reached or user accepts current approximation",
+      "remaining gaps require new reference images or manual art"
+    ],
+    "screenshotPolicy": {
+      "requiredForPasses": [
+        "blockout",
+        "structural-pass",
+        "form-refinement",
+        "material-pass",
+        "surface-pass",
+        "lighting-pass",
+        "interaction-pass"
+      ],
+      "preferredCapture": "in-app-browser-screenshot",
+      "fallbackCapture": "user-supplied-screenshot-path",
+      "minimumEvidence": "Each visual pass needs a reference image, rendered screenshot, side-by-side comparison sheet, AI vision score, layer scores, and critique before choosing continue.",
+      "reviewPairRule": "Compare the same camera/viewpoint whenever possible; do not judge a front reference against a random render angle.",
+      "acceptanceAuthority": "AI vision review of the comparison sheet. Code-generated pixel similarity is not sufficient evidence."
+    }
+  },
+  "featureReviewTargets": [
+    {
+      "id": "overall-silhouette",
+      "required": true,
+      "threshold": 0.75
+    },
+    {
+      "id": "cap-knurls",
+      "required": true,
+      "threshold": 0.7
+    },
+    {
+      "id": "gasket",
+      "required": true,
+      "threshold": 0.7
+    },
+    {
+      "id": "brushed-titanium",
+      "required": true,
+      "threshold": 0.7
+    },
+    {
+      "id": "shoulder-fillet",
+      "required": true,
+      "threshold": 0.7
+    }
+  ],
+  "sculptPipeline": {
+    "passGateMode": "locked-sequential",
+    "passOrder": [
+      "blockout",
+      "structural-pass",
+      "form-refinement",
+      "material-pass",
+      "surface-pass",
+      "lighting-pass",
+      "interaction-pass",
+      "optimization-pass"
+    ],
+    "currentPass": "blockout",
+    "completedPasses": [],
+    "lastCompletedPass": "",
+    "blockedReason": "blockout requires a browser screenshot and self-correction review before structural-pass unlocks",
+    "nextRequiredEvidence": [
+      "blockout browser render screenshot from your agent's browser/screenshot tool",
+      "side-by-side reference/render comparison sheet",
+      "AI vision score >= 0.7 with layer scores and mismatch critique",
+      "critical semantic feature scores from the same image pair meeting their individual thresholds",
+      "reviewHistory entry for blockout with action=continue"
+    ]
+  },
+  "lookDevTargets": {
+    "qualityPriority": "reference-fidelity",
+    "materialPass": {
+      "albedoPaletteRequired": true,
+      "roughnessVariationRequired": true,
+      "normalOrBumpRequired": true,
+      "localOverridesRequired": true,
+      "minimumTextureResolution": 1024,
+      "preferredTextureResolution": 2048,
+      "independentMapChannels": [
+        "albedo",
+        "roughness",
+        "height",
+        "normal",
+        "ambient-occlusion"
+      ],
+      "requiredSurfaceFrequencyBands": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "geometryReliefRequiredWhenSilhouetteAffected": true,
+      "referencePbrExtraction": {
+        "requiredWhenSourceImagePresent": true,
+        "targetThreshold": 0.7,
+        "stopOnLowConfidence": true,
+        "script": "forge/stage1_intake/extract_pbr_evidence.py",
+        "acceptedLimitation": "single-image extraction is reference-derived inference, not exact photogrammetry"
+      },
+      "mustAvoid": [
+        "single flat albedo per material",
+        "uniform roughness",
+        "albedo texture reused as roughness/height/normal/AO",
+        "single-frequency random noise",
+        "plastic-looking smooth bark, stone, cloth, foliage, or aged material",
+        "local color/detail described only in prose without material masks",
+        "claiming exact PBR recovery when confidence is below the target threshold"
+      ]
+    },
+    "lightingPass": {
+      "requiredTerms": [
+        "key light",
+        "fill light",
+        "rim or environment light",
+        "exposure",
+        "tone mapping",
+        "background",
+        "contact shadow"
+      ],
+      "mustAvoid": [
+        "ambient-only lighting",
+        "flat value range",
+        "missing contact shadow",
+        "reference lighting copied without separating material readability"
+      ]
+    },
+    "screenshotReview": [
+      "Compare albedo palette and local color zones.",
+      "Compare roughness/normal/bump response under light.",
+      "Compare cavity dirt, edge wear, stains, moss, scratches, or other local masks.",
+      "Compare key/fill/rim structure, exposure, tone mapping, background, and contact shadows.",
+      "Capture a neutral-light render to verify material readability without reference lighting.",
+      "Capture a grazing-light close-up to expose flat normals, uniform roughness, tiling, and plastic highlights.",
+      "Capture a reference-matched render from the same camera framing as the source."
+    ]
+  },
+  "actionReadiness": {
+    "contract": "Every macro/meso component should be generated as a stable named Object3D pivot node with a mesh child, action metadata, optional sockets, collider proxy, and destruction metadata.",
+    "defaultRigType": "action-ready-static-rig",
+    "rootMotionNode": "root",
+    "requiredComponentFields": [
+      "id",
+      "parent",
+      "transform",
+      "attachment for child appendages, connectors, limbs, tubes, handles, legs, horns, wings, branches, or cables",
+      "actionProfile.animationRole",
+      "actionProfile.pivot",
+      "actionProfile.collider",
+      "actionProfile.destruction"
+    ],
+    "transformChannels": [
+      "translate",
+      "rotate",
+      "scale",
+      "bend",
+      "twist",
+      "detach",
+      "visibility",
+      "material-state"
+    ],
+    "authoringRules": [
+      "Do not collapse independently movable parts into one mesh.",
+      "Put transforms on component pivot groups, not only on raw meshes.",
+      "For attached child parts, put the pivot at the semantic root/socket and build visible geometry from localStart to localEnd.",
+      "Represent hinge, socket, detachable, and breakable intent even when no animation is implemented yet.",
+      "Use simplified collider proxies for runtime physics instead of visual mesh colliders by default."
+    ],
+    "destructionPolicy": {
+      "defaultBreakable": false,
+      "fractureGroupNaming": "Use stable semantic names such as body-shell, left-hinge, glass-panel, branch-segment.",
+      "debrisStrategy": "Prefer detachable component groups and a small number of procedural fragments over random mesh explosion."
+    }
+  },
+  "assumptions": [
+    "Cap threads under the gasket are occluded and omitted",
+    "Inner vacuum wall not modeled",
+    "Base underside is flat with small fillet only",
+    "Supporting photos (side/detail/angle) used to resolve knurls and proportions"
+  ],
+  "coordinateFrame": {
+    "front": "camera-facing side in the reference image",
+    "up": "image up direction",
+    "scaleReference": "unit scale; adjust after first browser render"
+  },
+  "silhouette": {
+    "boundingShape": "tall cylinder with soft shoulder and short cap",
+    "aspectRatios": [
+      {
+        "axis": "height/width",
+        "value": 4.0,
+        "confidence": 0.9
+      }
+    ],
+    "symmetry": "radial about Y",
+    "dominantCurves": [
+      "soft shoulder fillet",
+      "tight base fillet",
+      "cap top edge radius"
+    ],
+    "negativeSpaces": [
+      "cap-to-neck seam recess"
+    ],
+    "landmarks": [
+      {
+        "id": "base",
+        "y": 0.0
+      },
+      {
+        "id": "shoulder",
+        "y": 0.72
+      },
+      {
+        "id": "gasket",
+        "y": 0.84
+      },
+      {
+        "id": "capTop",
+        "y": 1.0
+      }
+    ]
+  },
+  "viewEvidence": [
+    {
+      "id": "full-object",
+      "view": "primary",
+      "imageRegion": {
+        "x": 0.0,
+        "y": 0.0,
+        "width": 1.0,
+        "height": 1.0,
+        "units": "normalized"
+      },
+      "observations": [],
+      "confidence": 0.5
+    }
+  ],
+  "componentTree": [
+    {
+      "id": "root",
+      "name": "KELD bottle",
+      "level": "macro",
+      "role": "root",
+      "importance": 1.0,
+      "confidence": 0.9,
+      "primitive": "group",
+      "topologyClass": "solid",
+      "topologyRationale": "Hard-surface vacuum bottle part authored as lathe/cylinder primitives.",
+      "geometryDescriptor": {
+        "topologyIntent": "smooth lathe silhouette with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "fillet",
+          "bevelRadius": 0.04,
+          "segments": 4
+        },
+        "deformationStack": [],
+        "uvStrategy": "lathe cylindrical / generated",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": null,
+      "attachment": null,
+      "dimensions": {
+        "width": 2.0,
+        "height": 8.0,
+        "depth": 2.0,
+        "units": "relative",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "root",
+        "pivot": [
+          0,
+          0,
+          0
+        ],
+        "sockets": [
+          "root.socket"
+        ],
+        "collider": "cylinder"
+      },
+      "materialRef": null,
+      "localFeatures": [],
+      "children": [
+        "body",
+        "gasket",
+        "cap"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "body",
+      "name": "Body shell",
+      "level": "macro",
+      "role": "body",
+      "importance": 1.0,
+      "confidence": 0.9,
+      "primitive": "lathe",
+      "topologyClass": "revolved-solid",
+      "topologyRationale": "Hard-surface vacuum bottle part authored as lathe/cylinder primitives.",
+      "geometryDescriptor": {
+        "topologyIntent": "smooth lathe silhouette with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "fillet",
+          "bevelRadius": 0.04,
+          "segments": 4
+        },
+        "deformationStack": [],
+        "uvStrategy": "lathe cylindrical / generated",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "root",
+      "attachment": {
+        "parentSocket": "root.socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          6.4,
+          0
+        ],
+        "contactType": "seated",
+        "embedDepth": 0.02,
+        "overlap": 0.0,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 6.4,
+        "depth": 2.0,
+        "units": "relative",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static",
+        "pivot": [
+          0,
+          0,
+          0
+        ],
+        "sockets": [
+          "body.socket"
+        ],
+        "collider": "cylinder"
+      },
+      "materialRef": "titanium-brushed",
+      "localFeatures": [
+        {
+          "id": "baseFillet",
+          "kind": "edge",
+          "description": "Tight foot radius at ground contact"
+        },
+        {
+          "id": "shoulder",
+          "kind": "curve",
+          "description": "Soft convex shoulder into neck"
+        },
+        {
+          "id": "neck",
+          "kind": "waist",
+          "description": "Recessed neck \u00d8\u22480.85 body under gasket"
+        }
+      ],
+      "children": [
+        "shoulder",
+        "base"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "shoulder",
+      "name": "Shoulder fillet",
+      "level": "meso",
+      "role": "transition",
+      "importance": 0.85,
+      "confidence": 0.9,
+      "primitive": "lathe",
+      "topologyClass": "revolved-solid",
+      "topologyRationale": "Hard-surface vacuum bottle part authored as lathe/cylinder primitives.",
+      "geometryDescriptor": {
+        "topologyIntent": "smooth lathe silhouette with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "fillet",
+          "bevelRadius": 0.04,
+          "segments": 4
+        },
+        "deformationStack": [],
+        "uvStrategy": "lathe cylindrical / generated",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "body",
+      "attachment": {
+        "parentSocket": "body.socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.55,
+          0
+        ],
+        "contactType": "seated",
+        "embedDepth": 0.02,
+        "overlap": 0.0,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 0.55,
+        "depth": 2.0,
+        "units": "relative",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static",
+        "pivot": [
+          0,
+          0,
+          0
+        ],
+        "sockets": [
+          "shoulder.socket"
+        ],
+        "collider": "cylinder"
+      },
+      "materialRef": "titanium-brushed",
+      "localFeatures": [],
+      "children": [],
+      "notes": ""
+    },
+    {
+      "id": "base",
+      "name": "Base fillet",
+      "level": "meso",
+      "role": "foot",
+      "importance": 0.7,
+      "confidence": 0.9,
+      "primitive": "lathe",
+      "topologyClass": "revolved-solid",
+      "topologyRationale": "Hard-surface vacuum bottle part authored as lathe/cylinder primitives.",
+      "geometryDescriptor": {
+        "topologyIntent": "smooth lathe silhouette with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "fillet",
+          "bevelRadius": 0.04,
+          "segments": 4
+        },
+        "deformationStack": [],
+        "uvStrategy": "lathe cylindrical / generated",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "body",
+      "attachment": {
+        "parentSocket": "body.socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.2,
+          0
+        ],
+        "contactType": "seated",
+        "embedDepth": 0.02,
+        "overlap": 0.0,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 0.2,
+        "depth": 2.0,
+        "units": "relative",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static",
+        "pivot": [
+          0,
+          0,
+          0
+        ],
+        "sockets": [
+          "base.socket"
+        ],
+        "collider": "cylinder"
+      },
+      "materialRef": "titanium-brushed",
+      "localFeatures": [],
+      "children": [],
+      "notes": ""
+    },
+    {
+      "id": "gasket",
+      "name": "Seal gasket",
+      "level": "meso",
+      "role": "seal",
+      "importance": 0.8,
+      "confidence": 0.9,
+      "primitive": "torus",
+      "topologyClass": "solid",
+      "topologyRationale": "Hard-surface vacuum bottle part authored as lathe/cylinder primitives.",
+      "geometryDescriptor": {
+        "topologyIntent": "smooth lathe silhouette with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "fillet",
+          "bevelRadius": 0.04,
+          "segments": 4
+        },
+        "deformationStack": [],
+        "uvStrategy": "lathe cylindrical / generated",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "root",
+      "attachment": {
+        "parentSocket": "root.socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.07,
+          0
+        ],
+        "contactType": "seated",
+        "embedDepth": 0.02,
+        "overlap": 0.0,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 1.8,
+        "height": 0.07,
+        "depth": 1.8,
+        "units": "relative",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static",
+        "pivot": [
+          0,
+          0,
+          0
+        ],
+        "sockets": [
+          "gasket.socket"
+        ],
+        "collider": "cylinder"
+      },
+      "materialRef": "gasket-silicone",
+      "localFeatures": [],
+      "children": [],
+      "notes": ""
+    },
+    {
+      "id": "cap",
+      "name": "Screw cap",
+      "level": "macro",
+      "role": "cap",
+      "importance": 0.95,
+      "confidence": 0.9,
+      "primitive": "lathe",
+      "topologyClass": "revolved-solid",
+      "topologyRationale": "Hard-surface vacuum bottle part authored as lathe/cylinder primitives.",
+      "geometryDescriptor": {
+        "topologyIntent": "smooth lathe silhouette with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "fillet",
+          "bevelRadius": 0.04,
+          "segments": 4
+        },
+        "deformationStack": [],
+        "uvStrategy": "lathe cylindrical / generated",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "root",
+      "attachment": {
+        "parentSocket": "root.socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          1.28,
+          0
+        ],
+        "contactType": "seated",
+        "embedDepth": 0.02,
+        "overlap": 0.0,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 1.9,
+        "height": 1.28,
+        "depth": 1.9,
+        "units": "relative",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "detachable",
+        "pivot": [
+          0,
+          0,
+          0
+        ],
+        "sockets": [
+          "cap.socket"
+        ],
+        "collider": "cylinder"
+      },
+      "materialRef": "titanium-brushed",
+      "localFeatures": [
+        {
+          "id": "knurls",
+          "kind": "repetition",
+          "description": "\u224844 vertical knurl ridges on cap mid-band"
+        },
+        {
+          "id": "topFillet",
+          "kind": "edge",
+          "description": "Small radius on cap top rim"
+        },
+        {
+          "id": "radialBrush",
+          "kind": "surface",
+          "description": "Concentric brush on cap top"
+        }
+      ],
+      "children": [
+        "cap-shell",
+        "knurl-band",
+        "cap-top"
+      ],
+      "notes": ""
+    },
+    {
+      "id": "cap-shell",
+      "name": "Cap cylinder",
+      "level": "meso",
+      "role": "shell",
+      "importance": 0.9,
+      "confidence": 0.9,
+      "primitive": "lathe",
+      "topologyClass": "revolved-solid",
+      "topologyRationale": "Hard-surface vacuum bottle part authored as lathe/cylinder primitives.",
+      "geometryDescriptor": {
+        "topologyIntent": "smooth lathe silhouette with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "fillet",
+          "bevelRadius": 0.04,
+          "segments": 4
+        },
+        "deformationStack": [],
+        "uvStrategy": "lathe cylindrical / generated",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "cap",
+      "attachment": {
+        "parentSocket": "cap.socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          1.28,
+          0
+        ],
+        "contactType": "seated",
+        "embedDepth": 0.02,
+        "overlap": 0.0,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 1.9,
+        "height": 1.28,
+        "depth": 1.9,
+        "units": "relative",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static",
+        "pivot": [
+          0,
+          0,
+          0
+        ],
+        "sockets": [
+          "cap-shell.socket"
+        ],
+        "collider": "cylinder"
+      },
+      "materialRef": "titanium-brushed",
+      "localFeatures": [],
+      "children": [],
+      "notes": ""
+    },
+    {
+      "id": "knurl-band",
+      "name": "Knurl grip band",
+      "level": "micro",
+      "role": "grip",
+      "importance": 0.95,
+      "confidence": 0.9,
+      "primitive": "instanced-box",
+      "topologyClass": "solid",
+      "topologyRationale": "Hard-surface vacuum bottle part authored as lathe/cylinder primitives.",
+      "geometryDescriptor": {
+        "topologyIntent": "smooth lathe silhouette with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "fillet",
+          "bevelRadius": 0.04,
+          "segments": 4
+        },
+        "deformationStack": [],
+        "uvStrategy": "lathe cylindrical / generated",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "cap",
+      "attachment": {
+        "parentSocket": "cap.socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.55,
+          0
+        ],
+        "contactType": "seated",
+        "embedDepth": 0.02,
+        "overlap": 0.0,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 1.95,
+        "height": 0.55,
+        "depth": 0.06,
+        "units": "relative",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static",
+        "pivot": [
+          0,
+          0,
+          0
+        ],
+        "sockets": [
+          "knurl-band.socket"
+        ],
+        "collider": "cylinder"
+      },
+      "materialRef": "titanium-brushed",
+      "localFeatures": [],
+      "children": [],
+      "notes": ""
+    },
+    {
+      "id": "cap-top",
+      "name": "Cap top disc",
+      "level": "meso",
+      "role": "top",
+      "importance": 0.75,
+      "confidence": 0.9,
+      "primitive": "circle",
+      "topologyClass": "solid",
+      "topologyRationale": "Hard-surface vacuum bottle part authored as lathe/cylinder primitives.",
+      "geometryDescriptor": {
+        "topologyIntent": "smooth lathe silhouette with bevel-ready edges",
+        "edgeTreatment": {
+          "type": "fillet",
+          "bevelRadius": 0.04,
+          "segments": 4
+        },
+        "deformationStack": [],
+        "uvStrategy": "lathe cylindrical / generated",
+        "normalStrategy": "vertex normals from generated geometry"
+      },
+      "parent": "cap",
+      "attachment": {
+        "parentSocket": "cap.socket",
+        "localStart": [
+          0,
+          0,
+          0
+        ],
+        "localEnd": [
+          0,
+          0.02,
+          0
+        ],
+        "contactType": "seated",
+        "embedDepth": 0.02,
+        "overlap": 0.0,
+        "gapTolerance": 0.01
+      },
+      "dimensions": {
+        "width": 1.4,
+        "height": 0.02,
+        "depth": 1.4,
+        "units": "relative",
+        "confidence": 0.9
+      },
+      "transform": {
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "rotation": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          1,
+          1,
+          1
+        ]
+      },
+      "actionProfile": {
+        "animationRole": "static",
+        "pivot": [
+          0,
+          0,
+          0
+        ],
+        "sockets": [
+          "cap-top.socket"
+        ],
+        "collider": "cylinder"
+      },
+      "materialRef": "titanium-brushed",
+      "localFeatures": [],
+      "children": [],
+      "notes": ""
+    }
+  ],
+  "materials": [
+    {
+      "id": "titanium-brushed",
+      "name": "Brushed titanium",
+      "type": "physical",
+      "shaderModel": "MeshPhysicalMaterial",
+      "baseColor": "#8a8f8c",
+      "color": "#8a8f8c",
+      "albedo": {
+        "dominant": "#8a8f8c",
+        "secondary": [
+          "#b5b5b5",
+          "#3d3d3d"
+        ],
+        "samplingNotes": "Mid titanium grey from packshot; highlights #b5b5b5 shadows #3d3d3d"
+      },
+      "colorVariation": {
+        "palette": [
+          "#8a8f8c",
+          "#7e8380",
+          "#949a97"
+        ],
+        "pattern": "brushed-anisotropic",
+        "amplitude": 0.08,
+        "heightCorrelation": 0.1
+      },
+      "metalness": 0.96,
+      "roughness": 0.42,
+      "clearcoat": 0.08,
+      "clearcoatRoughness": 0.55,
+      "anisotropy": 0.65,
+      "anisotropyRotation": 1.5708,
+      "textureResolution": 1024,
+      "textureProjection": {
+        "mode": "cylindrical",
+        "repeat": [
+          1.0,
+          4.0
+        ],
+        "anisotropy": 8,
+        "texelDensityIntent": "Fine circumferential brush streaks"
+      },
+      "surfaceFrequencyBands": [
+        {
+          "id": "brush",
+          "frequency": 64.0,
+          "amplitude": 0.12,
+          "role": "horizontal brush grain"
+        },
+        {
+          "id": "macro",
+          "frequency": 2.0,
+          "amplitude": 0.05,
+          "role": "broad metal variation"
+        }
+      ],
+      "localOverrides": [
+        {
+          "id": "capTop",
+          "target": "cap-top",
+          "roughness": 0.35,
+          "anisotropyRotation": 0.0,
+          "notes": "Radial/concentric brush on flat top"
+        }
+      ],
+      "notes": "Satin brushed Ti \u2014 not mirror. Vertical softbox highlight from circumferential grain."
+    },
+    {
+      "id": "gasket-silicone",
+      "name": "Black gasket",
+      "type": "standard",
+      "shaderModel": "MeshStandardMaterial",
+      "baseColor": "#1a1a1a",
+      "color": "#1a1a1a",
+      "albedo": {
+        "dominant": "#1a1a1a",
+        "secondary": [
+          "#0a0a0a"
+        ],
+        "samplingNotes": "Matte elastomer lip"
+      },
+      "colorVariation": {
+        "palette": [
+          "#1a1a1a"
+        ],
+        "pattern": "flat",
+        "amplitude": 0.0,
+        "heightCorrelation": 0.0
+      },
+      "metalness": 0.05,
+      "roughness": 0.88,
+      "textureResolution": 256,
+      "textureProjection": {
+        "mode": "uv",
+        "repeat": [
+          1,
+          1
+        ],
+        "anisotropy": 1,
+        "texelDensityIntent": "flat"
+      },
+      "surfaceFrequencyBands": [],
+      "localOverrides": [],
+      "notes": "Thin black seal under cap"
+    }
+  ],
+  "repetitionSystems": [
+    {
+      "id": "cap-knurls",
+      "name": "Cap vertical knurls",
+      "componentRef": "knurl-band",
+      "count": 44,
+      "layout": "radial",
+      "axis": "y",
+      "radius": 0.96,
+      "instancePrimitive": "box",
+      "notes": "Identity feature from detail packshot"
+    }
+  ],
+  "buildPasses": [
+    {
+      "id": "blockout",
+      "goal": "Match macro silhouette and proportions.",
+      "componentRefs": [
+        "root",
+        "body",
+        "gasket",
+        "cap",
+        "knurl-band",
+        "shoulder",
+        "base",
+        "cap-top"
+      ],
+      "acceptance": [
+        "Silhouette reads correctly without materials.",
+        "Quality contract has named all required macro feature groups before code generation.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "structural-pass",
+      "goal": "Build the component hierarchy implied by the pre-spec complexity assessment.",
+      "componentRefs": [
+        "root",
+        "body",
+        "gasket",
+        "cap",
+        "knurl-band",
+        "shoulder",
+        "base",
+        "cap-top"
+      ],
+      "acceptance": [
+        "Macro, meso, and repeated structures meet qualityContract.minimumSpecDepth.",
+        "Parent-child relations, joints, seams, sockets, and contact points are explicit.",
+        "Every attached child appendage/connector has parentSocket, localStart/localEnd, contactType, embedDepth or overlap, and gapTolerance.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "form-refinement",
+      "goal": "Refine shape, deformation, bevels, tapers, curves, asymmetry, and visible local geometry.",
+      "componentRefs": [
+        "root",
+        "body",
+        "gasket",
+        "cap",
+        "knurl-band",
+        "shoulder",
+        "base",
+        "cap-top"
+      ],
+      "acceptance": [
+        "Important visible forms are represented in component geometryDescriptor, deformations, localFeatures, or repetitionSystems.",
+        "Endpoint-based child parts are rooted at their attachment sockets and do not visibly float away from parents.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "material-pass",
+      "goal": "Match material color, roughness, bump, and local variation.",
+      "componentRefs": [
+        "root",
+        "body",
+        "gasket",
+        "cap",
+        "knurl-band",
+        "shoulder",
+        "base",
+        "cap-top"
+      ],
+      "acceptance": [
+        "Reference-derived albedo palette records dominant, secondary, and accent colors per visible material.",
+        "Each important material defines roughness variation and at least one normal/bump/displacement response.",
+        "Local material overrides, dirt/wear/stains/moss/chips/scratches or equivalent masks are tied to evidenceRefs.",
+        "Thin, transparent, reflective, wet, or fibrous materials document alpha/transmission/clearcoat/metalness/fiber response when relevant.",
+        "Generated preview uses procedural albedo/roughness/bump texture or vertex color variation instead of one flat color.",
+        "Generated preview uses independent PBR maps at 1024px or higher for the quality-first tier.",
+        "If source pixels are available, referencePbr extraction passed at confidence >= 0.7 or the pass is stopped/requesting better references.",
+        "Macro, meso, and micro surface frequency bands are visible at the intended review distance without obvious tiling.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "surface-pass",
+      "goal": "Add procedural surface locality such as normal/bump/displacement, AO, dirt, stains, chips, grain, moss, scratches, and wear.",
+      "componentRefs": [
+        "root",
+        "body",
+        "gasket",
+        "cap",
+        "knurl-band",
+        "shoulder",
+        "base",
+        "cap-top"
+      ],
+      "acceptance": [
+        "Every required material feature group has local overrides or surfaceDetail tied to evidenceRefs.",
+        "A grazing-angle close-up proves that normal/height detail breaks highlights naturally and does not read as smooth plastic.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "lighting-pass",
+      "goal": "Make material and form readable under neutral turntable lighting plus optional reference lighting.",
+      "componentRefs": [
+        "root",
+        "body",
+        "gasket",
+        "cap",
+        "knurl-band",
+        "shoulder",
+        "base",
+        "cap-top"
+      ],
+      "acceptance": [
+        "lightingFromPhoto identifies key light direction/color/intensity, fill light, rim or environment light, and ambient color.",
+        "Exposure, tone mapping, background color/gradient, shadow softness, and contact shadow behavior are specified.",
+        "Lighting does not hide geometry/material gaps and screenshots can be compared fairly to the reference.",
+        "Neutral, grazing, and reference-matched lighting checks distinguish material errors from lighting errors.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "interaction-pass",
+      "goal": "Make the model ready for future animation, transformation, physics, or destruction.",
+      "componentRefs": [
+        "root",
+        "body",
+        "gasket",
+        "cap",
+        "knurl-band",
+        "shoulder",
+        "base",
+        "cap-top"
+      ],
+      "acceptance": [
+        "Macro and movable meso components have stable pivot nodes.",
+        "Sockets, collider proxies, and destruction metadata are present for future runtime actions.",
+        "AI vision comparison score meets selfCorrectLoop.visualAcceptance.threshold."
+      ]
+    },
+    {
+      "id": "optimization-pass",
+      "goal": "Protect runtime performance after visual fidelity is accepted.",
+      "componentRefs": [
+        "root",
+        "body",
+        "gasket",
+        "cap",
+        "knurl-band",
+        "shoulder",
+        "base",
+        "cap-top"
+      ],
+      "acceptance": [
+        "Triangle count, draw calls, instancing, LOD strategy, and FPS target are documented or verified.",
+        "Repeated detail is instanced or simplified where possible without breaking silhouette/material believability."
+      ]
+    }
+  ],
+  "visualEvidence": [],
+  "reviewHistory": [],
+  "lodPlan": [
+    {
+      "tier": "near",
+      "distance": 0,
+      "strategy": "full component tree and material layers"
+    },
+    {
+      "tier": "far",
+      "distance": 30,
+      "strategy": "merge static components and reduce local feature geometry"
+    }
+  ],
+  "performanceBudget": {
+    "qualityPriority": "reference-fidelity",
+    "targetTriangles": 250000,
+    "maxDrawCalls": 160,
+    "textureSize": 2048,
+    "fpsTarget": 30,
+    "optimizationPolicy": "Reach accepted visual fidelity first, then optimize without removing reference-critical geometry or surface layers."
+  },
+  "lightingFromPhoto": [
+    {
+      "role": "key",
+      "direction": "front-left",
+      "quality": "large softbox",
+      "notes": "vertical highlight strip on body"
+    },
+    {
+      "role": "fill",
+      "direction": "right",
+      "quality": "soft cool rim"
+    },
+    {
+      "role": "env",
+      "quality": "dark studio",
+      "notes": "charcoal ground plane contact shadow"
+    }
+  ],
+  "proceduralStrategy": [
+    "Block out macro silhouette first.",
+    "Add component hierarchy and joints.",
+    "Create stable pivot groups, sockets, collider proxies, and destruction metadata before visual polish.",
+    "Refine forms with bevels, tapers, bends, and procedural noise.",
+    "Run reference PBR extraction for important source-image materials and stop when confidence is below the target threshold.",
+    "Add material variation before adding expensive micro-geometry."
+  ],
+  "animationAnchors": [
+    "root pivot node supports whole-object translation, rotation, scale, and visibility changes",
+    "component pivot groups support later local transforms without rebuilding geometry"
+  ],
+  "destructionAnchors": [
+    "actionProfile.destruction.fractureGroup marks detachable or breakable component sets",
+    "component seams and sockets define plausible break points instead of random explosions"
+  ],
+  "risks": [],
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "queries": [
+      "brushed titanium PBR metalness roughness anisotropy",
+      "cylindrical vessel lathe shoulder fillet",
+      "knurled cap grip ridges"
+    ],
+    "note": "Auto BM25 from new_pre_spec_assessment; agent-filled domain terms for vacuum bottle / titanium."
+  }
+}

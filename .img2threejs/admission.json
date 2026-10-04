@@ -1,0 +1,14 @@
+{
+  "admitted": true,
+  "reasons": [],
+  "provenance": {
+    "viewpoint": "reference",
+    "sourcePath": "/Users/achraf/pro/websites/field-thermos/public/photos/keld-bottle-hero.jpg",
+    "width": 864,
+    "height": 1152,
+    "foregroundCoverage": 0.1716,
+    "largestComponentFraction": 0.9963,
+    "pHash": 18442502993967376576,
+    "duplicateOfHash": null
+  }
+}

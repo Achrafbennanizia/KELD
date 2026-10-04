@@ -1,0 +1,11 @@
+{
+  "path": "/Users/achraf/pro/websites/field-thermos/public/photos/keld-bottle-hero.jpg",
+  "type": "jpeg",
+  "bytes": 168648,
+  "width": 864,
+  "height": 1152,
+  "aspectRatio": 0.75,
+  "technicalSuitability": "pass",
+  "warnings": [],
+  "note": "This is only technical image probing. Semantic object suitability still requires visual inspection."
+}

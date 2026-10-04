@@ -1,0 +1,225 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useReducedMotion,
+} from "motion/react";
+import { SECTIONS, type SectionId } from "@/lib/sections";
+import {
+  isProgrammaticScroll,
+  prefersReducedMotion,
+  smoothScrollToId,
+} from "@/lib/scroll-to";
+
+const SNAP_AT = 0.93;
+const SNAP_DURATION = 1.15;
+
+function goToSection(id: string, duration = 2.1) {
+  smoothScrollToId(id, duration);
+}
+
+function sectionTops() {
+  return SECTIONS.map((s) => {
+    const el = document.getElementById(s.id);
+    return el ? { id: s.id, top: el.offsetTop } : null;
+  }).filter((x): x is { id: SectionId; top: number } => Boolean(x));
+}
+
+let lastY = 0;
+let scrollDir: 1 | -1 | 0 = 0;
+
+function maybeThresholdSnap() {
+  if (isProgrammaticScroll() || prefersReducedMotion()) return;
+  const tops = sectionTops();
+  if (tops.length < 2) return;
+  const y = window.scrollY;
+
+  let i = 0;
+  for (let n = 0; n < tops.length; n++) {
+    if (y >= tops[n].top) i = n;
+  }
+
+  if (scrollDir >= 0 && i < tops.length - 1) {
+    const a = tops[i].top;
+    const b = tops[i + 1].top;
+    const span = b - a;
+    if (span >= 48 && (y - a) / span >= SNAP_AT && y < b - 2) {
+      goToSection(tops[i + 1].id, SNAP_DURATION);
+      return;
+    }
+  }
+
+  if (scrollDir <= 0 && i < tops.length - 1) {
+    const a = tops[i].top;
+    const b = tops[i + 1].top;
+    const span = b - a;
+    if (span >= 48 && (b - y) / span >= SNAP_AT && y > a + 2) {
+      goToSection(tops[i].id, SNAP_DURATION);
+      return;
+    }
+  }
+
+  if (scrollDir <= 0 && i === tops.length - 1 && i > 0) {
+    const curr = tops[i].top;
+    const prev = tops[i - 1].top;
+    const span = curr - prev;
+    if (span >= 48 && y < curr && (curr - y) / span >= SNAP_AT && y > prev + 2) {
+      goToSection(tops[i - 1].id, SNAP_DURATION);
+    }
+  }
+}
+
+export function ScrollAssist() {
+  const reduced = useReducedMotion();
+  const [active, setActive] = useState<SectionId>("top");
+  const [hint, setHint] = useState(true);
+  const progressMv = useMotionValue(0);
+  const progress = useSpring(progressMv, {
+    stiffness: reduced ? 400 : 48,
+    damping: reduced ? 40 : 18,
+    mass: 0.85,
+  });
+
+  useEffect(() => {
+    let raf = 0;
+    let settle = 0;
+    let ticking = false;
+
+    const read = () => {
+      ticking = false;
+      const max =
+        document.documentElement.scrollHeight - window.innerHeight;
+      progressMv.set(max > 0 ? Math.min(1, window.scrollY / max) : 0);
+      if (window.scrollY > window.innerHeight * 0.45) setHint(false);
+
+      const mid = window.scrollY + window.innerHeight * 0.4;
+      let best: SectionId = "top";
+      let bestDist = Infinity;
+      for (const section of SECTIONS) {
+        const el = document.getElementById(section.id);
+        if (!el) continue;
+        const d = Math.abs(el.offsetTop - mid);
+        if (d < bestDist) {
+          bestDist = d;
+          best = section.id;
+        }
+      }
+      setActive(best);
+    };
+
+    const onScroll = () => {
+      const y = window.scrollY;
+      const dy = y - lastY;
+      if (Math.abs(dy) > 0.5) scrollDir = dy > 0 ? 1 : -1;
+      lastY = y;
+      if (!ticking) {
+        ticking = true;
+        raf = requestAnimationFrame(read);
+      }
+      maybeThresholdSnap();
+      window.clearTimeout(settle);
+      settle = window.setTimeout(() => maybeThresholdSnap(), 90);
+    };
+
+    lastY = window.scrollY;
+    const boot = requestAnimationFrame(read);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      cancelAnimationFrame(boot);
+      cancelAnimationFrame(raf);
+      window.clearTimeout(settle);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [progressMv]);
+
+  return (
+    <>
+      <aside
+        className="pointer-events-none fixed top-1/2 right-3 z-40 hidden -translate-y-1/2 md:right-5 md:block lg:right-8"
+        aria-label="Section progress"
+      >
+        <div className="pointer-events-auto relative flex flex-col items-center gap-3">
+          <div className="absolute top-2 bottom-2 left-1/2 w-px -translate-x-1/2 bg-line" aria-hidden />
+          <motion.div
+            className="absolute top-2 left-1/2 w-px origin-top -translate-x-1/2 bg-glacier"
+            style={{ scaleY: progress, height: "calc(100% - 1rem)" }}
+            aria-hidden
+          />
+          {SECTIONS.map((section) => {
+            const isActive = active === section.id;
+            return (
+              <button
+                key={section.id}
+                type="button"
+                title={section.label}
+                aria-label={`Go to ${section.label}`}
+                aria-current={isActive ? "true" : undefined}
+                onClick={() => {
+                  goToSection(section.id);
+                  setHint(false);
+                }}
+                className="group relative z-10 flex h-4 w-4 items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-glacier"
+              >
+                <motion.span
+                  className="block rounded-full"
+                  animate={
+                    isActive
+                      ? {
+                          width: 10,
+                          height: 10,
+                          backgroundColor: "#7ba89a",
+                          boxShadow: "0 0 14px rgba(123,168,154,0.5)",
+                        }
+                      : {
+                          width: 6,
+                          height: 6,
+                          backgroundColor: "rgba(168,160,148,0.55)",
+                          boxShadow: "0 0 0 rgba(123,168,154,0)",
+                        }
+                  }
+                  transition={{ type: "spring", stiffness: 220, damping: 22 }}
+                />
+              </button>
+            );
+          })}
+        </div>
+      </aside>
+
+      <motion.button
+        type="button"
+        onClick={() => {
+          goToSection("why");
+          setHint(false);
+        }}
+        initial={false}
+        animate={{ opacity: hint ? 1 : 0, y: hint ? 0 : 10 }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        className={`fixed bottom-[max(1.5rem,env(safe-area-inset-bottom))] left-1/2 z-40 hidden -translate-x-1/2 flex-col items-center gap-1.5 text-[10px] tracking-[0.22em] text-mist-muted uppercase sm:flex ${
+          hint ? "" : "pointer-events-none"
+        }`}
+        aria-label="Scroll to next section"
+      >
+        <span>Scroll</span>
+        <motion.span
+          className="block h-8 w-px origin-top bg-gradient-to-b from-glacier to-transparent"
+          animate={
+            hint && !reduced
+              ? { scaleY: [1, 0.55, 1], opacity: [0.9, 0.35, 0.9] }
+              : {}
+          }
+          transition={
+            hint && !reduced
+              ? { duration: 2.4, repeat: Infinity, ease: "easeInOut" }
+              : undefined
+          }
+          aria-hidden
+        />
+      </motion.button>
+    </>
+  );
+}

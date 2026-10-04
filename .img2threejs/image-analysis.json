@@ -1,0 +1,32 @@
+{
+  "object": "KELD titanium vacuum bottle",
+  "class": "hard-surface cylindrical vessel",
+  "complexity": "moderate",
+  "parts": [
+    {"id": "body", "shape": "cylinder", "notes": "~75% height, filleted base, H:W ~3.5:1 body alone"},
+    {"id": "shoulder", "shape": "smooth convex flare from neck to body"},
+    {"id": "neck", "shape": "concave waist under cap, diameter ~0.85 of body"},
+    {"id": "gasket", "shape": "thin dark matte ring under cap"},
+    {"id": "cap", "shape": "short cylinder, slight under-body diameter, vertical knurls, flat top with concentric brush"}
+  ],
+  "proportions": {
+    "totalHeightToWidth": 4.0,
+    "capHeightFraction": 0.16,
+    "bodyDiameter": 1.0,
+    "capDiameter": 0.92,
+    "neckMinDiameter": 0.85
+  },
+  "materials": [
+    {"id": "titanium-brushed", "color": "#8a8f8c", "metalness": 0.95, "roughness": 0.42, "brush": "horizontal on body, concentric on cap top"},
+    {"id": "gasket-silicone", "color": "#1a1a1a", "metalness": 0.0, "roughness": 0.85}
+  ],
+  "identityFeatures": [
+    "vertical knurl band on cap midsection",
+    "satin brushed titanium not mirror",
+    "soft shoulder fillet into body",
+    "thin black gasket lip",
+    "vertical softbox highlight strip"
+  ],
+  "hiddenUnknowns": ["thread geometry under cap", "exact inner vacuum wall", "base underside"],
+  "camera": {"elevationDeg": 12, "yaw": "three-quarter-front"}
+}
