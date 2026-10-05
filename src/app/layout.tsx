@@ -31,6 +31,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: "cover",
   themeColor: "#0c1210",
+  colorScheme: "dark",
 };
 
 export default function RootLayout({
@@ -43,7 +44,12 @@ export default function RootLayout({
       lang="en"
       className={`${bricolage.variable} ${figtree.variable} h-full`}
     >
-      <body className="min-h-full antialiased">{children}</body>
+      <body className="min-h-full antialiased">
+        <a className="skip-link" href="#main">
+          Skip to content
+        </a>
+        {children}
+      </body>
     </html>
   );
 }

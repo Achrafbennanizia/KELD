@@ -9,9 +9,19 @@ import {
   type ReactNode,
 } from "react";
 
-type Value = { progress: number; reducedMotion: boolean };
+type Value = {
+  progress: number;
+  reducedMotion: boolean;
+  paused: boolean;
+  togglePause: () => void;
+};
 
-const Ctx = createContext<Value>({ progress: 0, reducedMotion: false });
+const Ctx = createContext<Value>({
+  progress: 0,
+  reducedMotion: false,
+  paused: false,
+  togglePause: () => {},
+});
 
 export function useScrollProgress() {
   return useContext(Ctx);
@@ -19,11 +29,13 @@ export function useScrollProgress() {
 
 export function ScrollProgressProvider({ children }: { children: ReactNode }) {
   const [progress, setProgress] = useState(0);
-  const [reducedMotion, setReducedMotion] = useState(false);
+  const [systemReduced, setSystemReduced] = useState(false);
+  const [paused, setPaused] = useState(false);
+  const reducedMotion = systemReduced || paused;
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => setReducedMotion(media.matches);
+    const sync = () => setSystemReduced(media.matches);
     sync();
     media.addEventListener("change", sync);
 
@@ -49,8 +61,13 @@ export function ScrollProgressProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo(
-    () => ({ progress, reducedMotion }),
-    [progress, reducedMotion],
+    () => ({
+      progress,
+      reducedMotion,
+      paused,
+      togglePause: () => setPaused((value) => !value),
+    }),
+    [progress, reducedMotion, paused],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

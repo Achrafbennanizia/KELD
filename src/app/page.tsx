@@ -19,7 +19,7 @@ export default function Home() {
         <ProductStage />
         <Nav />
         <ScrollAssist />
-        <main className="relative">
+        <main id="main" tabIndex={-1} className="relative">
           <Hero />
           <Why />
           <Method />

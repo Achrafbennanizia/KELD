@@ -10,6 +10,15 @@ import { useScrollProgress } from "@/lib/scroll-progress";
  * Media Gallery — one finish + unique camera angle per section.
  * Packshot travels continuously on scroll (strongest through 2–4 and 5–6).
  */
+const PHOTO_SIZE: Record<string, { width: number; height: number }> = {
+  "/photos/keld-bottle-hero.jpg": { width: 864, height: 1152 },
+  "/photos/keld-bottle-side.jpg": { width: 864, height: 1152 },
+  "/photos/keld-bottle-angle.jpg": { width: 864, height: 1152 },
+  "/photos/keld-bottle-rear.jpg": { width: 864, height: 1152 },
+  "/photos/keld-bottle-detail.jpg": { width: 1152, height: 864 },
+  "/photos/keld-bottle-low.jpg": { width: 864, height: 1152 },
+};
+
 export function ProductStage() {
   const { progress, reducedMotion } = useScrollProgress();
   const pose = sampleBottlePose(reducedMotion ? 0.12 : progress);
@@ -164,6 +173,9 @@ export function ProductStage() {
                   <img
                     src={photoSrc(shot.src)}
                     alt={shot.alt}
+                    width={PHOTO_SIZE[shot.src.split("?")[0]]?.width ?? 864}
+                    height={PHOTO_SIZE[shot.src.split("?")[0]]?.height ?? 1152}
+                    loading={i === 0 ? "eager" : "lazy"}
                     className="h-full w-full object-cover"
                     style={{
                       objectPosition: shot.objectPosition,
@@ -256,7 +268,7 @@ export function ProductStage() {
                   <span
                     key={g.id}
                     title={g.name}
-                    className="relative block rounded-full transition-all duration-300"
+                    className="relative block rounded-full transition-[width,opacity,box-shadow] duration-300"
                     style={{
                       width: isActive ? 20 : 9,
                       height: 9,

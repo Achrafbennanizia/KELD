@@ -13,6 +13,7 @@ const LINKS = [
 
 function go(id: string) {
   return (e: React.MouseEvent) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
     e.preventDefault();
     smoothScrollToId(id, 1.45);
   };
@@ -33,8 +34,10 @@ export function Nav() {
           onClick={go("top")}
           className="nav-brand display min-w-0 truncate text-xs tracking-[0.16em] text-mist sm:text-sm sm:tracking-[0.18em]"
         >
-          <span className="md:hidden">{CONTENT.brand}</span>
-          <span className="hidden md:inline">
+          <span className="md:hidden" translate="no">
+            {CONTENT.brand}
+          </span>
+          <span className="hidden md:inline" translate="no">
             {CONTENT.house} / {CONTENT.brand}
           </span>
         </a>

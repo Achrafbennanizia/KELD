@@ -7,6 +7,7 @@ import {
   useSpring,
   useReducedMotion,
 } from "motion/react";
+import { useScrollProgress } from "@/lib/scroll-progress";
 import { SECTIONS, type SectionId } from "@/lib/sections";
 import {
   isProgrammaticScroll,
@@ -85,7 +86,9 @@ function maybeThresholdSnap() {
 }
 
 export function ScrollAssist() {
-  const reduced = useReducedMotion();
+  const systemReduced = useReducedMotion();
+  const { paused, togglePause } = useScrollProgress();
+  const reduced = Boolean(systemReduced) || paused;
   const [active, setActive] = useState<SectionId>("top");
   const [hint, setHint] = useState(true);
   const progressMv = useMotionValue(0);
@@ -244,6 +247,14 @@ export function ScrollAssist() {
           aria-hidden
         />
       </motion.button>
+      <button
+        type="button"
+        onClick={togglePause}
+        aria-pressed={paused}
+        className="fixed right-4 bottom-[max(1.25rem,env(safe-area-inset-bottom))] z-40 rounded-full border border-line bg-trail/90 px-3 py-2 text-[10px] font-semibold tracking-[0.16em] text-mist uppercase focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-glacier"
+      >
+        {paused ? "Play motion" : "Pause motion"}
+      </button>
     </>
   );
 }

@@ -48,6 +48,7 @@ export function Hero() {
           <a
             href="#reserve"
             onClick={(e) => {
+              if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
               e.preventDefault();
               smoothScrollToId("reserve", 2.15);
             }}
@@ -58,6 +59,7 @@ export function Hero() {
           <a
             href="#why"
             onClick={(e) => {
+              if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
               e.preventDefault();
               smoothScrollToId("why", 2.15);
             }}

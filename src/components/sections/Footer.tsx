@@ -19,7 +19,7 @@ export function Footer() {
     >
       <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-[1.4fr_1fr_1fr] md:gap-12">
         <div>
-          <p className="display text-sm tracking-[0.22em] text-mist">
+          <p className="display text-sm tracking-[0.22em] text-mist" translate="no">
             {CONTENT.house} / {CONTENT.brand}
           </p>
           <p className="mt-3 max-w-sm text-sm leading-relaxed text-mist-muted">
@@ -28,6 +28,7 @@ export function Footer() {
           <a
             href="#reserve"
             onClick={(e) => {
+              if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
               e.preventDefault();
               smoothScrollToId("reserve", 2.15);
             }}
@@ -47,6 +48,7 @@ export function Footer() {
                 key={link.id}
                 href={`#${link.id}`}
                 onClick={(e) => {
+                  if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
                   e.preventDefault();
                   smoothScrollToId(link.id, 2.15);
                 }}
